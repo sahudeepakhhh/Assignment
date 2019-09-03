@@ -1,68 +1,154 @@
-function showFilms(films,film){
-	$("#film").html("<h1>Films</h1>");
-	$("#"+film).html("");
+function showFilms(films){
+    var demo = [];	
 	for(var i=0; i < films.length; i++){ 
-		$.get(films[i], function(data, status){
-           $("#"+film).append("<p>" + data.title + "</p><br>");
-    	});
-    }
+		$.ajax({
+	        url: films[i],
+	        type: 'get',
+	        dataType: 'json',
+	        async: false,
+	        success: function(data) {
+	            demo.push(data.title);
+	        } 
+	   });   
+	}
+	if(demo) return demo; 
 }
-
 function getActor(number){
-	
-	var demo = "";
+	var demo = null;
 	$("#data_container").attr("number",number);
-	var url = "https://swapi.co/api/people/"+ number;
-    $.get(url, function(data, status){
-        console.log(data);
-        demo +=  data;
-
-    },"json");
-    
-    if(demo != ""){
-    	return demo;
-    }else{
-    	return "error";
-    }
-    
-     
-       
+    var url = "https://swapi.co/api/people/"+ number;
+	$.ajax({
+        url: url,
+        type: 'get',
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            demo = data;
+        } 
+	 });   
+	 if(demo) return demo;   	
 }
 
 $("#add").click(function(){
-	$("#show_data").html("Fetching Info...");
-	$("#show_films").html("");
+	$("#data_container").html("Fetching Info...");
+	//$("#show_films").html("");
     var randomNumber =  Math.floor((Math.random() * 80 ) + 1);
 
-    var results = getActor(randomNumber);
+    var actor = getActor(randomNumber);
+    if(actor){
+    	actor.id = randomNumber;
+    }else{
+    	alert("Error");
+    	return;
+    }
     
-    console.log(results);
-
-    return;
+    
     var output = "";
-    output += "<h1>Actor</h1><hr>";
-	output += '<table class="table table-bordered"><thead>';
-	output += '<tr><th>ID</th><th>Name</th><th>BirthYear</th><th>Gender</th><th>EyeColor</th><th>HairColor</th><th>Mass</th></tr></thead>';
-	output += '<tbody><tr><td>'+ actor.id +'</td>';
-	output += '<td>'+ actor.name +'</td>';
-	output += '<td>'+ actor.birth_year +'</td>';
-	output += '<td>'+ actor.gender +'</td>';
-	output += '<td>'+ actor.eye_color +'</td>';
-	output += '<td>'+ actor.hair_color +'</td>';
-	output += '<td>'+ actor.mass +'</td><tbody></table>';
+	output += '<p>ActorId :'+ " "+actor.id +'</p>';
+	output += '<p>Name :'+ " "+actor.name +'</p>';;
+	output += "<p>Films</p>";
+    output += "<ul>";
     
-    $("#show_data").html(output);
-    showFilms(actor.films,"show_films");
-       
+    
+    var films = showFilms(actor.films);
+    
+    for(var i=0;i< films.length;i++){
+       output += "<li>"+films[i]+"</li>";
+    }
+    output += "</ul>";
+    
+    $("#data_container").html(output);
+
 });
 $("#pull").click(function(){
-    $("#data_container").html("Showing All Films");
+    //$("#data_container")
+    $.ajax({
+    	   headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+           },	
+           url:"/get",
+           type: 'get',
+           success: function(data,status) {
+              console.log(data);
+              $("#data_display").html(data.message);          
+           },
+           error: function (jqXHR, exception) {
+		        var msg = '';
+		        if (jqXHR.status === 0) {
+		            msg = 'Not connect.\n Verify Network.';
+		        } else if (jqXHR.status == 404) {
+		            msg = 'Requested page not found. [404]';
+		        } else if (jqXHR.status == 500) {
+		            msg = 'Internal Server Error [500].';
+		        } else if (exception === 'parsererror') {
+		            msg = 'Requested JSON parse failed.';
+		        } else if (exception === 'timeout') {
+		            msg = 'Time out error.';
+		        } else if (exception === 'abort') {
+		            msg = 'Ajax request aborted.';
+		        } else {
+		            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+		        }
+		        console.log(msg);
+		    }     
+	    }); 
 });
+
 $("#save").click(function(){
     var id = $("#data_container").attr("number");
     if(id == undefined || id == ""){
     	alert("No Data To Save, First Fetch the data then try to save");
     }else{
-    	$("#data_container").html(id);
+    	var actor = getActor(id);
+    	var films = showFilms(actor.films);
+    	actor.id = id;
+    	film_title = [];
+
+    	for(var i=0;i< films.length;i++){
+          film_title.push(films[i]);
+        }
+        actor.film_name = film_title;
+        
+    	$.ajax({
+    	   headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+           },	
+           url:"/save",
+           type: 'post',
+           data: { data : actor },
+           success: function(data) {
+              console.log(data);
+              //$("#data_container").html(data.message);
+              if(data.message == "success"){
+              	alert("Data Saved successfully!!");
+              }else if(data.message == "error"){
+              	alert("This User Already Exist,Click the Pull Button for viewing the same..");
+              }else{
+              	//$("#data_container").html(data);
+              	alert("Unknown Error, Try Again!!");
+             
+              }
+              
+           },
+           error: function (jqXHR, exception) {
+		        var msg = '';
+		        if (jqXHR.status === 0) {
+		            msg = 'Not connect.\n Verify Network.';
+		        } else if (jqXHR.status == 404) {
+		            msg = 'Requested page not found. [404]';
+		        } else if (jqXHR.status == 500) {
+		            msg = 'Internal Server Error [500].';
+		        } else if (exception === 'parsererror') {
+		            msg = 'Requested JSON parse failed.';
+		        } else if (exception === 'timeout') {
+		            msg = 'Time out error.';
+		        } else if (exception === 'abort') {
+		            msg = 'Ajax request aborted.';
+		        } else {
+		            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+		        }
+		        console.log(msg);
+		    }     
+	    }); 
     }
 });
