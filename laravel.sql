@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2019 at 09:56 AM
+-- Generation Time: Sep 04, 2019 at 10:48 AM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -55,7 +55,28 @@ INSERT INTO `actors` (`num`, `name`, `id`) VALUES
 (14, 'R2-D2', 3),
 (15, 'Arvel Crynyd', 29),
 (16, 'Biggs Darklighter', 9),
-(17, 'C-3PO', 2);
+(17, 'C-3PO', 2),
+(18, 'Cordé', 61),
+(19, 'Qui-Gon Jinn', 32),
+(20, 'Boba Fett', 22),
+(21, 'Roos Tarpals', 37),
+(22, 'Mace Windu', 51),
+(23, 'Anakin Skywalker', 11),
+(24, 'Dexter Jettster', 71),
+(25, 'Bib Fortuna', 45),
+(26, 'Bossk', 24),
+(27, 'Kit Fisto', 53),
+(28, 'Lobot', 26),
+(29, 'Ric Olié', 39),
+(30, 'Poggle the Lesser', 63),
+(31, 'Jabba Desilijic Tiure', 16),
+(32, 'Greedo', 15),
+(33, 'Palpatine', 21),
+(34, 'Adi Gallia', 55),
+(35, 'Luke Skywalker', 1),
+(36, 'San Hill', 77),
+(37, 'Lama Su', 72),
+(38, 'Jek Tono Porkins', 19);
 
 -- --------------------------------------------------------
 
@@ -119,7 +140,46 @@ INSERT INTO `films` (`sr`, `movie`, `fid`) VALUES
 (43, 'The Phantom Menace', 2),
 (44, 'Revenge of the Sith', 2),
 (45, 'Return of the Jedi', 2),
-(46, 'A New Hope', 2);
+(46, 'A New Hope', 2),
+(47, 'The Empire Strikes Back', 22),
+(48, 'Attack of the Clones', 22),
+(49, 'Return of the Jedi', 22),
+(50, 'The Phantom Menace', 37),
+(51, 'Attack of the Clones', 51),
+(52, 'The Phantom Menace', 51),
+(53, 'Revenge of the Sith', 51),
+(54, 'Attack of the Clones', 11),
+(55, 'The Phantom Menace', 11),
+(56, 'Revenge of the Sith', 11),
+(57, 'Attack of the Clones', 71),
+(58, 'Return of the Jedi', 45),
+(59, 'The Empire Strikes Back', 24),
+(60, 'Attack of the Clones', 53),
+(61, 'The Phantom Menace', 53),
+(62, 'Revenge of the Sith', 53),
+(63, 'The Empire Strikes Back', 26),
+(64, 'The Phantom Menace', 39),
+(65, 'Attack of the Clones', 63),
+(66, 'Revenge of the Sith', 63),
+(67, 'The Phantom Menace', 16),
+(68, 'Return of the Jedi', 16),
+(69, 'A New Hope', 16),
+(70, 'A New Hope', 15),
+(71, 'The Empire Strikes Back', 21),
+(72, 'Attack of the Clones', 21),
+(73, 'The Phantom Menace', 21),
+(74, 'Revenge of the Sith', 21),
+(75, 'Return of the Jedi', 21),
+(76, 'The Phantom Menace', 55),
+(77, 'Revenge of the Sith', 55),
+(78, 'The Empire Strikes Back', 1),
+(79, 'Revenge of the Sith', 1),
+(80, 'Return of the Jedi', 1),
+(81, 'A New Hope', 1),
+(82, 'The Force Awakens', 1),
+(83, 'Attack of the Clones', 77),
+(84, 'Attack of the Clones', 72),
+(85, 'A New Hope', 19);
 
 --
 -- Indexes for dumped tables
@@ -145,13 +205,13 @@ ALTER TABLE `films`
 -- AUTO_INCREMENT for table `actors`
 --
 ALTER TABLE `actors`
-  MODIFY `num` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `num` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `films`
 --
 ALTER TABLE `films`
-  MODIFY `sr` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `sr` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

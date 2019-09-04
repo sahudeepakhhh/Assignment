@@ -44,18 +44,18 @@ $("#add").click(function(){
     
     
     var output = "";
-	output += '<p>ActorId :'+ " "+actor.id +'</p>';
-	output += '<p>Name :'+ " "+actor.name +'</p>';;
-	output += "<p>Films</p>";
-    output += "<ul>";
+	output += '<h4>ActorId   :</h4>'+ " "+actor.id;
+	output += '<h4>ActorName :</h4>'+ " "+actor.name;
+	output += '<h4>ActorFilms:</h4>';
+    output += "<ol>";
     
     
     var films = showFilms(actor.films);
     
     for(var i=0;i< films.length;i++){
-       output += "<li>"+films[i]+"</li>";
+       output += "<p><li>"+films[i]+"</li></p>";
     }
-    output += "</ul>";
+    output += "</ol>";
     
     $("#data_container").html(output);
 
@@ -108,7 +108,7 @@ $("#save").click(function(){
           film_title.push(films[i]);
         }
         actor.film_name = film_title;
-        
+        //console.log(film_title);
     	$.ajax({
     	   headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -118,9 +118,27 @@ $("#save").click(function(){
            data: { data : actor },
            success: function(data) {
               console.log(data);
-              //$("#data_container").html(data.message);
+              var item = ""
+              var div = $("#table-body");
+              $("#data_container").html("");
               if(data.message == "success"){
               	alert("Data Saved successfully!!");
+              	var actorName =  data.actor.name;
+                var actorId =  data.actor.id;
+               
+                item +="<tr>";
+                
+                item +='<td>'+actorId+'</td>';
+                item +='<td>'+actorName+'</td>';
+                item += '<td><ol>';
+                for(var i=0; i < film_title.length;i++){
+                	item +='<li><a href=/film/'+film_title[i]+'>'+film_title[i]+'</a></li>';
+                }
+                item += '</ol></td>';
+                item +='</tr>';
+
+                div.append(item);
+
               }else if(data.message == "error"){
               	alert("This User Already Exist,Click the Pull Button for viewing the same..");
               }else{
